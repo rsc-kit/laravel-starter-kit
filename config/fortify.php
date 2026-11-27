@@ -77,6 +77,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Redirects
+    |--------------------------------------------------------------------------
+    |
+    | The React tree renders the auth pages, so 'views' is false, and with it
+    | Fortify sends a reset password to 'home' rather than to the login page.
+    | A guest is bounced from there to /login and the "Your password has been
+    | reset." status is spent on the way, so the reset goes to /login itself.
+    |
+    */
+
+    'redirects' => [
+        'password-reset' => '/login',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Fortify Routes Prefix / Subdomain
     |--------------------------------------------------------------------------
     |

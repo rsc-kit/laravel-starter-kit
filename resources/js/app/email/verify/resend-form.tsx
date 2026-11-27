@@ -1,20 +1,28 @@
-'use client';
+"use client";
 
-import { Form } from '@rsc-kit/core/form';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import * as session from '@/server-actions/session';
-import * as verification from '@/server-actions/verification';
+import { Form } from "@rsc-kit/core/form";
+import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import * as session from "@/server-actions/session";
+import * as verification from "@/server-actions/verification";
 
 export function ResendForm() {
     return (
         <div className="space-y-6 text-center">
             <Form action={verification.send}>
-                {({ pending }) => (
-                    <Button disabled={pending} variant="secondary">
-                        {pending && <Spinner />}
-                        Resend verification email
-                    </Button>
+                {({ pending, formError }) => (
+                    <>
+                        <Button disabled={pending} variant="secondary">
+                            {pending && <Spinner />}
+                            Resend verification email
+                        </Button>
+                        <InputError
+                            message={formError}
+                            role="alert"
+                            className="mt-2"
+                        />
+                    </>
                 )}
             </Form>
 

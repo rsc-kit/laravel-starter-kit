@@ -1,6 +1,7 @@
-import { useHttp } from '@inertiajs/react';
+import { isRedirected } from '@rsc-kit/core/errors';
 import { useCallback, useState } from 'react';
-import { qrCode, recoveryCodes, secretKey } from '@/routes/two-factor';
+import * as twoFactor from '@/server-actions/two-factor';
+import type { TwoFactorSecretKey, TwoFactorSetupData } from '@/types/auth';
 
 export type UseTwoFactorAuthReturn = {
     qrCodeSvg: string | null;
@@ -17,11 +18,21 @@ export type UseTwoFactorAuthReturn = {
     fetchRecoveryCodes: () => Promise<void>;
 };
 
-export const OTP_MAX_LENGTH = 6;
+/**
+ * Fortify's answer, or a failure: a call the password confirmation turned
+ * away is on its way to /user/confirm-password, and has no answer to show.
+ */
+async function ask<T>(call: () => Promise<unknown>): Promise<T> {
+    const answer = await call();
+
+    if (isRedirected(answer)) {
+        throw new Error('Redirected');
+    }
+
+    return answer as T;
+}
 
 export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
-    const { submit } = useHttp();
-
     const [qrCodeSvg, setQrCodeSvg] = useState<string | null>(null);
     const [manualSetupKey, setManualSetupKey] = useState<string | null>(null);
     const [recoveryCodesList, setRecoveryCodesList] = useState<string[]>([]);
@@ -48,41 +59,39 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
 
     const fetchQrCode = useCallback(async (): Promise<void> => {
         try {
-            const { svg } = (await submit(qrCode())) as {
-                svg: string;
-                url: string;
-            };
+            const { svg } = await ask<TwoFactorSetupData>(() => twoFactor.qrCode());
 
             setQrCodeSvg(svg);
         } catch {
             setErrors((prev) => [...prev, 'Failed to fetch QR code']);
             setQrCodeSvg(null);
         }
-    }, [submit]);
+    }, []);
 
     const fetchSetupKey = useCallback(async (): Promise<void> => {
         try {
-            const { secretKey: key } = (await submit(secretKey())) as {
-                secretKey: string;
-            };
+            const { secretKey: key } = await ask<TwoFactorSecretKey>(() =>
+                twoFactor.secretKey(),
+            );
 
             setManualSetupKey(key);
         } catch {
             setErrors((prev) => [...prev, 'Failed to fetch a setup key']);
             setManualSetupKey(null);
         }
-    }, [submit]);
+    }, []);
 
     const fetchRecoveryCodes = useCallback(async (): Promise<void> => {
         try {
             setErrors([]);
-            const codes = (await submit(recoveryCodes())) as string[];
-            setRecoveryCodesList(codes);
+            setRecoveryCodesList(
+                await ask<string[]>(() => twoFactor.recoveryCodes()),
+            );
         } catch {
             setErrors((prev) => [...prev, 'Failed to fetch recovery codes']);
             setRecoveryCodesList([]);
         }
-    }, [submit]);
+    }, []);
 
     const fetchSetupData = useCallback(async (): Promise<void> => {
         try {

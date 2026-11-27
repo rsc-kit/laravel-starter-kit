@@ -1,20 +1,18 @@
-import type { InertiaLinkProps } from '@inertiajs/react';
-import { usePage } from '@inertiajs/react';
-import { toUrl } from '@/lib/utils';
+import { usePathname } from '@rsc-kit/core/usePathname';
 
 export type IsCurrentUrlFn = (
-    urlToCheck: NonNullable<InertiaLinkProps['href']>,
+    urlToCheck: string,
     currentUrl?: string,
     startsWith?: boolean,
 ) => boolean;
 
 export type IsCurrentOrParentUrlFn = (
-    urlToCheck: NonNullable<InertiaLinkProps['href']>,
+    urlToCheck: string,
     currentUrl?: string,
 ) => boolean;
 
 export type WhenCurrentUrlFn = <TIfTrue, TIfFalse = null>(
-    urlToCheck: NonNullable<InertiaLinkProps['href']>,
+    urlToCheck: string,
     ifTrue: TIfTrue,
     ifFalse?: TIfFalse,
 ) => TIfTrue | TIfFalse;
@@ -26,53 +24,41 @@ export type UseCurrentUrlReturn = {
     whenCurrentUrl: WhenCurrentUrlFn;
 };
 
+/** Whether a link is the page the visitor is on, from the router's path. */
 export function useCurrentUrl(): UseCurrentUrlReturn {
-    const page = usePage();
-    const currentUrlPath = new URL(
-        page.url,
-        typeof window !== 'undefined'
-            ? window.location.origin
-            : 'http://localhost',
-    ).pathname;
+    const currentUrlPath = usePathname();
 
     const isCurrentUrl: IsCurrentUrlFn = (
-        urlToCheck: NonNullable<InertiaLinkProps['href']>,
-        currentUrl?: string,
-        startsWith: boolean = false,
+        urlToCheck,
+        currentUrl,
+        startsWith = false,
     ) => {
         const urlToCompare = currentUrl ?? currentUrlPath;
-        const urlString = toUrl(urlToCheck);
 
         const comparePath = (path: string): boolean =>
             startsWith ? urlToCompare.startsWith(path) : path === urlToCompare;
 
-        if (!urlString.startsWith('http')) {
-            return comparePath(urlString);
+        if (!urlToCheck.startsWith('http')) {
+            return comparePath(urlToCheck);
         }
 
         try {
-            const absoluteUrl = new URL(urlString);
-
-            return comparePath(absoluteUrl.pathname);
+            return comparePath(new URL(urlToCheck).pathname);
         } catch {
             return false;
         }
     };
 
     const isCurrentOrParentUrl: IsCurrentOrParentUrlFn = (
-        urlToCheck: NonNullable<InertiaLinkProps['href']>,
-        currentUrl?: string,
-    ) => {
-        return isCurrentUrl(urlToCheck, currentUrl, true);
-    };
+        urlToCheck,
+        currentUrl,
+    ) => isCurrentUrl(urlToCheck, currentUrl, true);
 
     const whenCurrentUrl: WhenCurrentUrlFn = <TIfTrue, TIfFalse = null>(
-        urlToCheck: NonNullable<InertiaLinkProps['href']>,
+        urlToCheck: string,
         ifTrue: TIfTrue,
         ifFalse: TIfFalse = null as TIfFalse,
-    ): TIfTrue | TIfFalse => {
-        return isCurrentUrl(urlToCheck) ? ifTrue : ifFalse;
-    };
+    ): TIfTrue | TIfFalse => (isCurrentUrl(urlToCheck) ? ifTrue : ifFalse);
 
     return {
         currentUrl: currentUrlPath,

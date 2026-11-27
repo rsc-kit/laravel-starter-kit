@@ -1,13 +1,13 @@
-import type { Metadata } from '@rsc-kit/core/metadata';
-import { Suspense } from 'react';
-import AuthLayout from '@/layouts/auth-layout';
-import { ResendForm } from './resend-form';
+import type { Metadata } from "@rsc-kit/core/metadata";
+import { Suspense } from "react";
+import AuthLayout from "@/layouts/auth-layout";
+import { ResendForm } from "./resend-form";
 
 // Where `verified` sends someone who has not, and the url Fortify's
 // notification links back to.
-export const name = 'verification.notice';
+export const name = "verification.notice";
 
-export const metadata: Metadata = { title: 'Email verification' };
+export const metadata: Metadata = { title: "Email verification" };
 
 export default function VerifyEmail() {
     return (
@@ -25,9 +25,9 @@ export default function VerifyEmail() {
 }
 
 async function LinkSent() {
-    const status = await rpc<string | null>('Shared.status');
+    const status = await rpc<string | null>("Shared.status");
 
-    if (status !== 'verification-link-sent') {
+    if (status !== "verification-link-sent") {
         return null;
     }
 

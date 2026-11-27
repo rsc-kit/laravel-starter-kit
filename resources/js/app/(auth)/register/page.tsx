@@ -1,12 +1,12 @@
-import type { Metadata } from '@rsc-kit/core/metadata';
-import AuthLayout from '@/layouts/auth-layout';
-import { RegisterForm } from './register-form';
+import type { Metadata } from "@rsc-kit/core/metadata";
+import AuthLayout from "@/layouts/auth-layout";
+import { RegisterForm } from "./register-form";
 
-export const metadata: Metadata = { title: 'Register' };
+export const metadata: Metadata = { title: "Register" };
 
 export default async function Register() {
     const { passwordRules } = await rpc<{ passwordRules: string }>(
-        'Shared.auth',
+        "Shared.auth",
     );
 
     return (

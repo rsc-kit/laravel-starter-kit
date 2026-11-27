@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abb0879065d1aa4db422657bcbdc39f8",
+    "content-hash": "7460e260b818f55cd1d33aa1dc034b3b",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4029,11 +4029,11 @@
         },
         {
             "name": "rsc-kit/laravel",
-            "version": "dev-action-returns-redirect",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "../lara-bun",
-                "reference": "81a43d74921ed689b566a3e3b60378c7ab75cac9"
+                "reference": "f6b17097217c24a5b5d5c2bba7f02dba7a3990c9"
             },
             "require": {
                 "illuminate/console": "^13.0",
@@ -10543,7 +10543,7 @@
     "aliases": [
         {
             "package": "rsc-kit/laravel",
-            "version": "dev-action-returns-redirect",
+            "version": "dev-main",
             "alias": "0.30.1",
             "alias_normalized": "0.30.1.0"
         }

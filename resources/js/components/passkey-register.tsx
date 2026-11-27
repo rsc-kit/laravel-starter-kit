@@ -1,3 +1,5 @@
+'use client';
+
 import { usePasskeyRegister } from '@laravel/passkeys/react';
 import { useState } from 'react';
 import InputError from '@/components/input-error';
@@ -11,6 +13,11 @@ type Props = {
 
 export default function PasskeyRegistration({ onSuccess }: Props) {
     const [name, setName] = useState(() => {
+        // Rendered on the server too, where there is no browser to name.
+        if (typeof navigator === 'undefined') {
+            return '';
+        }
+
         const ua = navigator.userAgent;
 
         const browser = [

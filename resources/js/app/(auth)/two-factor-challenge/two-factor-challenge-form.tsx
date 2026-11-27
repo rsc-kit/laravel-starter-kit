@@ -1,78 +1,63 @@
-import { Form, Head, setLayoutProps } from '@inertiajs/react';
-import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { useMemo, useState } from 'react';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+"use client";
+
+import { Form } from "@rsc-kit/core/form";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useState } from "react";
+import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
-} from '@/components/ui/input-otp';
-import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
-import { store } from '@/routes/two-factor/login';
+} from "@/components/ui/input-otp";
+import AuthLayout from "@/layouts/auth-layout";
+import { OTP_MAX_LENGTH } from "@/lib/two-factor";
+import * as challenge from "@/server-actions/two-factor-challenge";
 
-export default function TwoFactorChallenge() {
-    const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
-    const [code, setCode] = useState<string>('');
+const modes = {
+    code: {
+        title: "Authentication code",
+        description:
+            "Enter the authentication code provided by your authenticator application.",
+        toggleText: "login using a recovery code",
+    },
+    recovery: {
+        title: "Recovery code",
+        description:
+            "Please confirm access to your account by entering one of your emergency recovery codes.",
+        toggleText: "login using an authentication code",
+    },
+};
 
-    const authConfigContent = useMemo<{
-        title: string;
-        description: string;
-        toggleText: string;
-    }>(() => {
-        if (showRecoveryInput) {
-            return {
-                title: 'Recovery code',
-                description:
-                    'Please confirm access to your account by entering one of your emergency recovery codes.',
-                toggleText: 'login using an authentication code',
-            };
-        }
+export function TwoFactorChallengeForm() {
+    const [mode, setMode] = useState<keyof typeof modes>("code");
+    const [code, setCode] = useState("");
+    const content = modes[mode];
 
-        return {
-            title: 'Authentication code',
-            description:
-                'Enter the authentication code provided by your authenticator application.',
-            toggleText: 'login using a recovery code',
-        };
-    }, [showRecoveryInput]);
-
-    setLayoutProps({
-        title: authConfigContent.title,
-        description: authConfigContent.description,
-    });
-
-    const toggleRecoveryMode = (clearErrors: () => void): void => {
-        setShowRecoveryInput(!showRecoveryInput);
-        clearErrors();
-        setCode('');
+    const toggleMode = () => {
+        setMode(mode === "code" ? "recovery" : "code");
+        setCode("");
     };
 
     return (
-        <>
-            <Head title="Two-factor authentication" />
-
+        <AuthLayout title={content.title} description={content.description}>
             <div className="space-y-6">
-                <Form
-                    {...store.form()}
-                    className="space-y-4"
-                    resetOnError
-                    resetOnSuccess={!showRecoveryInput}
-                >
-                    {({ errors, processing, clearErrors }) => (
+                {/* Keyed by mode, so switching starts the form - and its errors - over. */}
+                <Form key={mode} action={challenge.store} className="space-y-4">
+                    {({ pending, error, formError }) => (
                         <>
-                            {showRecoveryInput ? (
+                            {mode === "recovery" ? (
                                 <>
                                     <Input
                                         name="recovery_code"
                                         type="text"
                                         placeholder="Enter recovery code"
-                                        autoFocus={showRecoveryInput}
+                                        autoFocus
                                         required
                                     />
                                     <InputError
-                                        message={errors.recovery_code}
+                                        message={error("recovery_code")}
                                     />
                                 </>
                             ) : (
@@ -82,8 +67,8 @@ export default function TwoFactorChallenge() {
                                             name="code"
                                             maxLength={OTP_MAX_LENGTH}
                                             value={code}
-                                            onChange={(value) => setCode(value)}
-                                            disabled={processing}
+                                            onChange={setCode}
+                                            disabled={pending}
                                             pattern={REGEXP_ONLY_DIGITS}
                                             autoFocus
                                         >
@@ -100,14 +85,15 @@ export default function TwoFactorChallenge() {
                                             </InputOTPGroup>
                                         </InputOTP>
                                     </div>
-                                    <InputError message={errors.code} />
+                                    <InputError message={error("code")} />
                                 </div>
                             )}
 
+                            <InputError message={formError} role="alert" />
                             <Button
                                 type="submit"
                                 className="w-full"
-                                disabled={processing}
+                                disabled={pending}
                             >
                                 Continue
                             </Button>
@@ -117,17 +103,15 @@ export default function TwoFactorChallenge() {
                                 <button
                                     type="button"
                                     className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                                    onClick={() =>
-                                        toggleRecoveryMode(clearErrors)
-                                    }
+                                    onClick={toggleMode}
                                 >
-                                    {authConfigContent.toggleText}
+                                    {content.toggleText}
                                 </button>
                             </div>
                         </>
                     )}
                 </Form>
             </div>
-        </>
+        </AuthLayout>
     );
 }

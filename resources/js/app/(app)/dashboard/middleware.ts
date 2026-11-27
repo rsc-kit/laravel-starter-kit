@@ -1,1 +1,1 @@
-export const middleware = ['verified'];
+export const middleware = ["verified"];

@@ -3,6 +3,7 @@
 namespace App\Rsc;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Features;
@@ -18,6 +19,12 @@ class Shared
         return $request->user();
     }
 
+    /** Whether the user model asks for a verified email address. */
+    public function mustVerifyEmail(Request $request): bool
+    {
+        return $request->user() instanceof MustVerifyEmail;
+    }
+
     /**
      * What Fortify left for the next page - "A new verification link has
      * been sent", "Your password has been reset".
@@ -25,6 +32,17 @@ class Shared
     public function status(Request $request): ?string
     {
         return $request->session()->get('status');
+    }
+
+    /**
+     * The toast an action flashed - "Profile updated." - for the page it
+     * sent the visitor to, as Inertia::flash('toast') was.
+     *
+     * @return array{type: 'success'|'info'|'warning'|'error', message: string}|null
+     */
+    public function toast(Request $request): ?array
+    {
+        return $request->session()->get('toast');
     }
 
     /**

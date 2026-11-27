@@ -1,10 +1,11 @@
-import { Form } from '@inertiajs/react';
-import { useRef } from 'react';
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import Heading from '@/components/heading';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import { Button } from '@/components/ui/button';
+"use client";
+
+import { Form } from "@rsc-kit/core/form";
+import { useRef } from "react";
+import Heading from "@/components/heading";
+import InputError from "@/components/input-error";
+import PasswordInput from "@/components/password-input";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogClose,
@@ -13,8 +14,9 @@ import {
     DialogFooter,
     DialogTitle,
     DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import * as profile from "@/server-actions/settings/profile";
 
 export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -55,15 +57,17 @@ export default function DeleteUser() {
                         </DialogDescription>
 
                         <Form
-                            {...ProfileController.destroy.form()}
-                            options={{
-                                preserveScroll: true,
-                            }}
+                            action={profile.destroy}
                             onError={() => passwordInput.current?.focus()}
-                            resetOnSuccess
                             className="space-y-6"
                         >
-                            {({ resetAndClearErrors, processing, errors }) => (
+                            {({
+                                reset,
+                                clearErrors,
+                                pending,
+                                error,
+                                formError,
+                            }) => (
                                 <>
                                     <div className="grid gap-2">
                                         <Label
@@ -81,16 +85,24 @@ export default function DeleteUser() {
                                             autoComplete="current-password"
                                         />
 
-                                        <InputError message={errors.password} />
+                                        <InputError
+                                            message={error("password")}
+                                        />
                                     </div>
+
+                                    <InputError
+                                        message={formError}
+                                        role="alert"
+                                    />
 
                                     <DialogFooter className="gap-2">
                                         <DialogClose asChild>
                                             <Button
                                                 variant="secondary"
-                                                onClick={() =>
-                                                    resetAndClearErrors()
-                                                }
+                                                onClick={() => {
+                                                    reset();
+                                                    clearErrors();
+                                                }}
                                             >
                                                 Cancel
                                             </Button>
@@ -98,7 +110,7 @@ export default function DeleteUser() {
 
                                         <Button
                                             variant="destructive"
-                                            disabled={processing}
+                                            disabled={pending}
                                             asChild
                                         >
                                             <button

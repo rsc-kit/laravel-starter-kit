@@ -1,16 +1,18 @@
-import type { UrlMethodPair } from '@inertiajs/core';
-import { router } from '@inertiajs/react';
-import { usePasskeyVerify } from '@laravel/passkeys/react';
-import { KeyRound } from 'lucide-react';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Spinner } from '@/components/ui/spinner';
+"use client";
+
+import { visit } from "@rsc-kit/core/router";
+import type { Route } from "@rsc-kit/core/routes";
+import { usePasskeyVerify } from "@laravel/passkeys/react";
+import { KeyRound } from "lucide-react";
+import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 
 type Props = {
     routes?: {
-        options: UrlMethodPair;
-        submit: UrlMethodPair;
+        options: string;
+        submit: string;
     };
     label?: string;
     loadingLabel?: string;
@@ -26,12 +28,13 @@ export default function PasskeyVerify({
     const { verify, isLoading, error, isSupported } = usePasskeyVerify({
         ...(routes && {
             routes: {
-                options: routes.options.url,
-                submit: routes.submit.url,
+                options: routes.options,
+                submit: routes.submit,
             },
         }),
         onSuccess: (response) => {
-            router.visit(response.redirect ?? '/dashboard');
+            // Laravel's answer: the url to go on to, after signing in or confirming.
+            visit((response.redirect ?? "/dashboard") as Route);
         },
     });
 
@@ -51,8 +54,8 @@ export default function PasskeyVerify({
                 >
                     {isLoading ? <Spinner /> : <KeyRound className="h-4 w-4" />}
                     {isLoading
-                        ? (loadingLabel ?? 'Authenticating...')
-                        : (label ?? 'Sign in with a passkey')}
+                        ? (loadingLabel ?? "Authenticating...")
+                        : (label ?? "Sign in with a passkey")}
                 </Button>
                 {error && (
                     <InputError message={error} className="text-center" />
@@ -65,7 +68,7 @@ export default function PasskeyVerify({
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-background px-2 text-muted-foreground">
-                        {separator ?? 'Or continue with email'}
+                        {separator ?? "Or continue with email"}
                     </span>
                 </div>
             </div>

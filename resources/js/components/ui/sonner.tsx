@@ -1,17 +1,14 @@
 'use client';
 
-import { useFlashToast } from '@/hooks/use-flash-toast';
-import { useTheme } from 'next-themes';
+import { useAppearance } from '@/hooks/use-appearance';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 function Toaster({ ...props }: ToasterProps) {
-    const { theme = 'system' } = useTheme();
-
-    useFlashToast();
+    const { appearance } = useAppearance();
 
     return (
         <Sonner
-            theme={theme as ToasterProps['theme']}
+            theme={appearance}
             className="toaster group"
             position="bottom-right"
             style={

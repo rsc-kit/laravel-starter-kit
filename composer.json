@@ -14,7 +14,7 @@
         "laravel/fortify": "^1.37.2",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
-        "rsc-kit/laravel": "dev-action-returns-redirect as 0.30.1"
+        "rsc-kit/laravel": "dev-main as 0.30.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",

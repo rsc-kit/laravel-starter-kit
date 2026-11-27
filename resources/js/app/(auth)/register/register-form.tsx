@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { Form } from '@rsc-kit/core/form';
-import { Honeypot } from '@rsc-kit/core/honeypot';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import * as registration from '@/server-actions/registration';
+import { Form } from "@rsc-kit/core/form";
+import { Honeypot } from "@rsc-kit/core/honeypot";
+import InputError from "@/components/input-error";
+import PasswordInput from "@/components/password-input";
+import TextLink from "@/components/text-link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import * as registration from "@/server-actions/registration";
 
 export function RegisterForm({ passwordRules }: { passwordRules: string }) {
     return (
         <Form action={registration.store} className="flex flex-col gap-6">
-            {({ pending, error }) => (
+            {({ pending, error, formError }) => (
                 <>
                     <div className="grid gap-6">
                         <div className="grid gap-2">
@@ -30,7 +30,7 @@ export function RegisterForm({ passwordRules }: { passwordRules: string }) {
                                 placeholder="Full name"
                             />
                             <InputError
-                                message={error('name')}
+                                message={error("name")}
                                 className="mt-2"
                             />
                         </div>
@@ -46,7 +46,7 @@ export function RegisterForm({ passwordRules }: { passwordRules: string }) {
                                 name="email"
                                 placeholder="email@example.com"
                             />
-                            <InputError message={error('email')} />
+                            <InputError message={error("email")} />
                         </div>
 
                         <div className="grid gap-2">
@@ -60,7 +60,7 @@ export function RegisterForm({ passwordRules }: { passwordRules: string }) {
                                 placeholder="Password"
                                 passwordrules={passwordRules}
                             />
-                            <InputError message={error('password')} />
+                            <InputError message={error("password")} />
                         </div>
 
                         <div className="grid gap-2">
@@ -77,12 +77,13 @@ export function RegisterForm({ passwordRules }: { passwordRules: string }) {
                                 passwordrules={passwordRules}
                             />
                             <InputError
-                                message={error('password_confirmation')}
+                                message={error("password_confirmation")}
                             />
                         </div>
 
                         <Honeypot />
 
+                        <InputError message={formError} role="alert" />
                         <Button
                             type="submit"
                             disabled={pending}
@@ -96,7 +97,7 @@ export function RegisterForm({ passwordRules }: { passwordRules: string }) {
                     </div>
 
                     <div className="text-center text-sm text-muted-foreground">
-                        Already have an account?{' '}
+                        Already have an account?{" "}
                         <TextLink href="/login" tabIndex={6}>
                             Log in
                         </TextLink>

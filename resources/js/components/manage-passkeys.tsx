@@ -1,9 +1,11 @@
-import { router } from '@inertiajs/react';
+'use client';
+
+import { refresh } from '@rsc-kit/core/router';
 import { KeyRound } from 'lucide-react';
-import { destroy } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyRegistrationController';
 import Heading from '@/components/heading';
 import PasskeyItem from '@/components/passkey-item';
 import PasskeyRegistration from '@/components/passkey-register';
+import * as passkeyActions from '@/server-actions/passkeys';
 import type { Passkey } from '@/types/auth';
 
 export type Props = {
@@ -29,14 +31,13 @@ export default function ManagePasskeys(props: Props) {
     const passkeys = props.passkeys ?? [];
 
     const handleDelete = (id: number, onError: () => void) => {
-        router.delete(destroy.url(id), {
-            preserveScroll: true,
-            onError,
-        });
+        // The package answers back(), and the page comes back without it.
+        passkeyActions.destroy(id).catch(onError);
     };
 
+    // Registered by the package in the browser: render the list again.
     const handleRegisterSuccess = () => {
-        router.reload();
+        refresh();
     };
 
     if (!(props.canManagePasskeys ?? false)) {

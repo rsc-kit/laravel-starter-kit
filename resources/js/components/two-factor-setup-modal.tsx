@@ -1,27 +1,29 @@
-import { Form } from '@inertiajs/react';
-import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { Check, Copy, ScanLine } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import AlertError from '@/components/alert-error';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
+"use client";
+
+import { Form } from "@rsc-kit/core/form";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { Check, Copy, ScanLine } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import AlertError from "@/components/alert-error";
+import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
-} from '@/components/ui/input-otp';
-import { Spinner } from '@/components/ui/spinner';
-import { useAppearance } from '@/hooks/use-appearance';
-import { useClipboard } from '@/hooks/use-clipboard';
-import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
-import { confirm } from '@/routes/two-factor';
+} from "@/components/ui/input-otp";
+import { Spinner } from "@/components/ui/spinner";
+import { useAppearance } from "@/hooks/use-appearance";
+import { useClipboard } from "@/hooks/use-clipboard";
+import { OTP_MAX_LENGTH } from "@/lib/two-factor";
+import * as twoFactor from "@/server-actions/two-factor";
 
 function GridScanIcon() {
     return (
@@ -83,8 +85,8 @@ function TwoFactorSetupStep({
                                         }}
                                         style={{
                                             filter:
-                                                resolvedAppearance === 'dark'
-                                                    ? 'invert(1) brightness(1.5)'
+                                                resolvedAppearance === "dark"
+                                                    ? "invert(1) brightness(1.5)"
                                                     : undefined,
                                         }}
                                     />
@@ -145,29 +147,22 @@ function TwoFactorVerificationStep({
     onClose: () => void;
     onBack: () => void;
 }) {
-    const [code, setCode] = useState<string>('');
+    const [code, setCode] = useState<string>("");
     const pinInputContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setTimeout(() => {
-            pinInputContainerRef.current?.querySelector('input')?.focus();
+            pinInputContainerRef.current?.querySelector("input")?.focus();
         }, 0);
     }, []);
 
     return (
         <Form
-            {...confirm.form()}
+            action={twoFactor.confirm}
             onSuccess={() => onClose()}
-            resetOnError
-            resetOnSuccess
+            onError={() => setCode("")}
         >
-            {({
-                processing,
-                errors,
-            }: {
-                processing: boolean;
-                errors?: { confirmTwoFactorAuthentication?: { code?: string } };
-            }) => (
+            {({ pending: processing, error, formError }) => (
                 <>
                     <div
                         ref={pinInputContainerRef}
@@ -178,6 +173,7 @@ function TwoFactorVerificationStep({
                                 id="otp"
                                 name="code"
                                 maxLength={OTP_MAX_LENGTH}
+                                value={code}
                                 onChange={setCode}
                                 disabled={processing}
                                 pattern={REGEXP_ONLY_DIGITS}
@@ -195,11 +191,8 @@ function TwoFactorVerificationStep({
                                     )}
                                 </InputOTPGroup>
                             </InputOTP>
-                            <InputError
-                                message={
-                                    errors?.confirmTwoFactorAuthentication?.code
-                                }
-                            />
+                            <InputError message={error("code")} />
+                            <InputError message={formError} role="alert" />
                         </div>
 
                         <div className="flex w-full space-x-5">
@@ -262,27 +255,27 @@ export default function TwoFactorSetupModal({
     }>(() => {
         if (twoFactorEnabled) {
             return {
-                title: 'Two-factor authentication enabled',
+                title: "Two-factor authentication enabled",
                 description:
-                    'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
-                buttonText: 'Close',
+                    "Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.",
+                buttonText: "Close",
             };
         }
 
         if (showVerificationStep) {
             return {
-                title: 'Verify authentication code',
+                title: "Verify authentication code",
                 description:
-                    'Enter the 6-digit code from your authenticator app',
-                buttonText: 'Continue',
+                    "Enter the 6-digit code from your authenticator app",
+                buttonText: "Continue",
             };
         }
 
         return {
-            title: 'Enable two-factor authentication',
+            title: "Enable two-factor authentication",
             description:
-                'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
-            buttonText: 'Continue',
+                "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app",
+            buttonText: "Continue",
         };
     }, [twoFactorEnabled, showVerificationStep]);
 

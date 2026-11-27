@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { Form } from '@rsc-kit/core/form';
-import { Honeypot } from '@rsc-kit/core/honeypot';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import * as session from '@/server-actions/session';
+import { Form } from "@rsc-kit/core/form";
+import { Honeypot } from "@rsc-kit/core/honeypot";
+import InputError from "@/components/input-error";
+import PasswordInput from "@/components/password-input";
+import TextLink from "@/components/text-link";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import * as session from "@/server-actions/session";
 
 export function LoginForm({
     canResetPassword,
@@ -21,7 +21,7 @@ export function LoginForm({
 }) {
     return (
         <Form action={session.store} className="flex flex-col gap-6">
-            {({ pending, error }) => (
+            {({ pending, error, formError }) => (
                 <>
                     <div className="grid gap-6">
                         <div className="grid gap-2">
@@ -36,7 +36,7 @@ export function LoginForm({
                                 autoComplete="email"
                                 placeholder="email@example.com"
                             />
-                            <InputError message={error('email')} />
+                            <InputError message={error("email")} />
                         </div>
 
                         <div className="grid gap-2">
@@ -60,7 +60,7 @@ export function LoginForm({
                                 autoComplete="current-password"
                                 placeholder="Password"
                             />
-                            <InputError message={error('password')} />
+                            <InputError message={error("password")} />
                         </div>
 
                         <div className="flex items-center space-x-3">
@@ -74,6 +74,7 @@ export function LoginForm({
 
                         <Honeypot />
 
+                        <InputError message={formError} role="alert" />
                         <Button
                             type="submit"
                             className="mt-4 w-full"
@@ -88,7 +89,7 @@ export function LoginForm({
 
                     {canRegister && (
                         <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
+                            Don't have an account?{" "}
                             <TextLink href="/register" tabIndex={5}>
                                 Sign up
                             </TextLink>

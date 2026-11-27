@@ -1,1 +1,1 @@
-export const middleware = ['guest'];
+export const middleware = ["guest"];

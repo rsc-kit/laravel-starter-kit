@@ -1,8 +1,8 @@
-import type { Metadata } from '@rsc-kit/core/metadata';
-import { Suspense } from 'react';
-import { WelcomeNav } from '@/components/welcome-nav';
+import type { Metadata } from "@rsc-kit/core/metadata";
+import { Suspense } from "react";
+import { WelcomeNav } from "@/components/welcome-nav";
 
-export const metadata: Metadata = { title: 'Welcome' };
+export const metadata: Metadata = { title: "Welcome" };
 
 // Everything but the nav is the same for every visitor, so the page is stored
 // at build and the nav, which asks who is signed in, streams into it.
