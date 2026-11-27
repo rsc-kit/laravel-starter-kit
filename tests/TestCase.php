@@ -15,14 +15,11 @@ use RuntimeException;
  */
 abstract class TestCase extends BaseTestCase
 {
+    /**
+     * phpunit.xml's, not set here: the endpoint is registered at boot only
+     * when there is a secret, so one set after boot found nothing to call.
+     */
     private const HOST_SECRET = 'testing';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        config(['rsc.host_call_secret' => self::HOST_SECRET]);
-    }
 
     protected function skipUnlessFortifyHas(string $feature, ?string $message = null): void
     {
