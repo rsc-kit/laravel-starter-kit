@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\DevCommands;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        // `serve` honours PHP_CLI_SERVER_WORKERS only with --no-reload, and
+        // one worker cannot render a page: it holds the request while the
+        // renderer calls back to it for the page's data.
+        DevCommands::artisan('serve --no-reload', 'server');
     }
 
     /**
