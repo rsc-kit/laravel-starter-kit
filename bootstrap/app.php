@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureEmailIsUnverified;
+use App\Http\Middleware\EnsureTwoFactorChallenge;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,8 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Written by the sidebar in the browser, and never read here.
-        $middleware->encryptCookies(except: ['sidebar_state']);
+        // Named for the pages' middleware.ts, which guard in Laravel's own
+        // vocabulary: what Fortify's challenge and prompt views checked.
+        $middleware->alias([
+            'two-factor.challenged' => EnsureTwoFactorChallenge::class,
+            'unverified' => EnsureEmailIsUnverified::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

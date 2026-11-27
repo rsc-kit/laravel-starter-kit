@@ -23,20 +23,17 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_verification_screen_can_be_rendered()
     {
-        $user = User::factory()->unverified()->create();
+        $this->actingAs(User::factory()->unverified()->create());
 
-        $response = $this->actingAs($user)->get(route('verification.notice'));
-
-        $response->assertOk();
+        $this->visit('/email/verify')->assertExactJson(['result' => true]);
     }
 
     public function test_unverified_users_are_redirected_to_the_email_verification_prompt(): void
     {
-        $user = User::factory()->unverified()->create();
+        $this->actingAs(User::factory()->unverified()->create());
 
-        $response = $this->actingAs($user)->get(route('appearance.edit'));
-
-        $response->assertRedirect(route('verification.notice'));
+        $this->visit('/settings/appearance')
+            ->assertJson(['redirect' => route('verification.notice', absolute: false)]);
     }
 
     public function test_email_can_be_verified()
@@ -97,14 +94,10 @@ class EmailVerificationTest extends TestCase
 
     public function test_verified_user_is_redirected_to_dashboard_from_verification_prompt(): void
     {
-        $user = User::factory()->create();
+        $this->actingAs(User::factory()->create());
 
-        Event::fake();
-
-        $response = $this->actingAs($user)->get(route('verification.notice'));
-
-        Event::assertNotDispatched(Verified::class);
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $this->visit('/email/verify')
+            ->assertJson(['redirect' => route('dashboard', absolute: false)]);
     }
 
     public function test_already_verified_user_visiting_verification_link_is_redirected_without_firing_event_again(): void

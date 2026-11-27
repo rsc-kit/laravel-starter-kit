@@ -4,7 +4,6 @@ namespace App\Rsc;
 
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
-use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Features;
 
 /** What the security settings page shows: two-factor state and passkeys. */
@@ -15,7 +14,6 @@ class Security
      *     canManageTwoFactor: bool,
      *     canManagePasskeys: bool,
      *     passkeys: list<array{id: int, name: string, authenticator: string|null, created_at_diff: string, last_used_at_diff: string|null}>,
-     *     passwordRules: string,
      *     twoFactorEnabled?: bool,
      *     requiresConfirmation?: bool,
      * }
@@ -27,7 +25,7 @@ class Security
             'canManageTwoFactor' => Features::canManageTwoFactorAuthentication(),
             'canManagePasskeys' => Features::canManagePasskeys(),
             'passkeys' => Features::canManagePasskeys()
-                ? $request->user()
+                ? array_values($request->user()
                     ->passkeys()
                     ->select(['id', 'name', 'credential', 'created_at', 'last_used_at'])
                     ->latest()
@@ -39,10 +37,8 @@ class Security
                         'created_at_diff' => $passkey->created_at->diffForHumans(),
                         'last_used_at_diff' => $passkey->last_used_at?->diffForHumans(),
                     ])
-                    ->values()
-                    ->all()
+                    ->all())
                 : [],
-            'passwordRules' => Password::defaults()->toPasswordRulesString(),
         ];
 
         if (Features::canManageTwoFactorAuthentication()) {

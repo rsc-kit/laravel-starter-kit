@@ -22,9 +22,7 @@ class PasswordResetTest extends TestCase
 
     public function test_reset_password_link_screen_can_be_rendered()
     {
-        $response = $this->get(route('password.request'));
-
-        $response->assertOk();
+        $this->visit('/forgot-password')->assertExactJson(['result' => true]);
     }
 
     public function test_reset_password_link_can_be_requested()
@@ -33,7 +31,8 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post(route('password.email'), ['email' => $user->email]);
+        $this->action('Password.email', ['email' => $user->email], from: '/forgot-password')
+            ->assertJson(['redirect' => '/forgot-password']);
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
@@ -44,12 +43,11 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post(route('password.email'), ['email' => $user->email]);
+        $this->action('Password.email', ['email' => $user->email], from: '/forgot-password');
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get(route('password.reset', $notification->token));
-
-            $response->assertOk();
+            $this->visit(route('password.reset', $notification->token, absolute: false))
+                ->assertExactJson(['result' => true]);
 
             return true;
         });
@@ -61,19 +59,16 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post(route('password.email'), ['email' => $user->email]);
+        $this->action('Password.email', ['email' => $user->email], from: '/forgot-password');
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-            $response = $this->post(route('password.update'), [
+            $this->action('Password.reset', [
                 'token' => $notification->token,
                 'email' => $user->email,
                 'password' => 'password',
                 'password_confirmation' => 'password',
-            ]);
-
-            $response
-                ->assertSessionHasNoErrors()
-                ->assertRedirect(route('login'));
+            ], from: route('password.reset', $notification->token, absolute: false))
+                ->assertJson(['redirect' => route('login', absolute: false)]);
 
             return true;
         });
@@ -83,13 +78,13 @@ class PasswordResetTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post(route('password.update'), [
+        $this->action('Password.reset', [
             'token' => 'invalid-token',
             'email' => $user->email,
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
-        ]);
-
-        $response->assertSessionHasErrors('email');
+        ], from: '/reset-password/invalid-token')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['email'], 'validationErrors');
     }
 }

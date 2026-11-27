@@ -39,19 +39,19 @@ class TwoFactor
         return $fortify->destroy($request, $disable);
     }
 
-    /** @return array{svg?: string, url?: string} */
+    /** Answers {svg, url}, or nothing before two-factor is enabled. */
     public function qrCode(Request $request, TwoFactorQrCodeController $fortify): mixed
     {
         return $fortify->show($request);
     }
 
-    /** @return array{secretKey?: string} */
+    /** Answers {secretKey}, or nothing before two-factor is enabled. */
     public function secretKey(Request $request, TwoFactorSecretKeyController $fortify): mixed
     {
         return $fortify->show($request);
     }
 
-    /** @return list<string> */
+    /** Answers the recovery codes, or nothing before two-factor is enabled. */
     public function recoveryCodes(Request $request, RecoveryCodeController $fortify): mixed
     {
         return $fortify->index($request);

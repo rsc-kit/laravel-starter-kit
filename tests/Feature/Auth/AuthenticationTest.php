@@ -14,22 +14,27 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered()
     {
-        $response = $this->get(route('login'));
+        $this->visit('/login')->assertExactJson(['result' => true]);
+    }
 
-        $response->assertOk();
+    public function test_signed_in_users_are_sent_on_from_the_login_screen()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->visit('/login')
+            ->assertJson(['redirect' => route('dashboard', absolute: false)]);
     }
 
     public function test_users_can_authenticate_using_the_login_screen()
     {
         $user = User::factory()->create();
 
-        $response = $this->post(route('login.store'), [
+        $this->action('Session.store', [
             'email' => $user->email,
             'password' => 'password',
-        ]);
+        ], from: '/login')->assertJson(['redirect' => route('dashboard', absolute: false)]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
     }
 
     public function test_users_with_two_factor_enabled_are_redirected_to_two_factor_challenge()
@@ -43,13 +48,13 @@ class AuthenticationTest extends TestCase
 
         $user = User::factory()->withTwoFactor()->create();
 
-        $response = $this->post(route('login'), [
+        $this->action('Session.store', [
             'email' => $user->email,
             'password' => 'password',
-        ]);
+        ], from: '/login')
+            ->assertJson(['redirect' => route('two-factor.login', absolute: false)])
+            ->assertSessionHas('login.id', $user->id);
 
-        $response->assertRedirect(route('two-factor.login'));
-        $response->assertSessionHas('login.id', $user->id);
         $this->assertGuest();
     }
 
@@ -57,21 +62,22 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->post(route('login.store'), [
+        $this->action('Session.store', [
             'email' => $user->email,
             'password' => 'wrong-password',
-        ]);
+        ], from: '/login')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['email'], 'validationErrors');
 
         $this->assertGuest();
     }
 
     public function test_users_can_logout()
     {
-        $user = User::factory()->create();
+        $this->actingAs(User::factory()->create());
 
-        $response = $this->actingAs($user)->post(route('logout'));
-
-        $response->assertRedirect(route('home'));
+        $this->action('Session.destroy', from: '/dashboard')
+            ->assertJson(['redirect' => route('home', absolute: false)]);
 
         $this->assertGuest();
     }
@@ -82,11 +88,9 @@ class AuthenticationTest extends TestCase
 
         RateLimiter::increment(md5('login'.implode('|', [$user->email, '127.0.0.1'])), amount: 5);
 
-        $response = $this->post(route('login.store'), [
+        $this->action('Session.store', [
             'email' => $user->email,
             'password' => 'wrong-password',
-        ]);
-
-        $response->assertTooManyRequests();
+        ], from: '/login')->assertTooManyRequests();
     }
 }

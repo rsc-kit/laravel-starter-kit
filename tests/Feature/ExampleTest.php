@@ -9,10 +9,8 @@ class ExampleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_returns_a_successful_response()
+    public function test_the_welcome_page_is_open_to_everyone()
     {
-        $response = $this->get(route('home'));
-
-        $response->assertOk();
+        $this->visit('/')->assertExactJson(['result' => true]);
     }
 }
