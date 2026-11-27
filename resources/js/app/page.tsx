@@ -36,7 +36,7 @@ export default function Welcome() {
                                     <span>
                                         Read the
                                         <a
-                                            href="https://laravel.com/docs"
+                                            href="https://docs.rsc-kit.dev/hosts/laravel/starter-kit/"
                                             target="_blank"
                                             className="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
                                         >
