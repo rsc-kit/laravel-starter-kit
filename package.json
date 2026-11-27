@@ -6,8 +6,8 @@
         "dev": "vite",
         "build": "vite build",
         "start": "bun .output/server/index.mjs",
-        "lint": "oxlint resources/js --type-aware --fix",
-        "lint:check": "oxlint resources/js --type-aware --deny-warnings",
+        "check": "oxlint resources/js --type-aware --deny-warnings",
+        "check:fix": "oxlint resources/js --type-aware --fix",
         "types:check": "tsc --noEmit"
     },
     "dependencies": {

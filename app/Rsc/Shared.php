@@ -59,14 +59,4 @@ class Shared
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
         ];
     }
-
-    /**
-     * Whether the sidebar is open, from the cookie it writes when toggled -
-     * read here so the first paint is the visitor's, not a default the
-     * browser corrects after hydration.
-     */
-    public function sidebarOpen(Request $request): bool
-    {
-        return $request->cookie('sidebar_state') !== 'false';
-    }
 }

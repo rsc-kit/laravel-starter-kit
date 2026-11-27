@@ -34,7 +34,7 @@ export default function PasskeyVerify({
         }),
         onSuccess: (response) => {
             // Laravel's answer: the url to go on to, after signing in or confirming.
-            visit((response.redirect ?? "/dashboard") as Route);
+            void visit((response.redirect ?? "/dashboard") as Route);
         },
     });
 

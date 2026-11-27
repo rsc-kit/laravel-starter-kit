@@ -53,3 +53,7 @@ dist
 *.bun-build
 bootstrap/rsc/vite
 public/rsc-hot
+
+# Not shipped, as upstream does not: each app resolves for the PHP and Node it runs.
+/composer.lock
+/bun.lock

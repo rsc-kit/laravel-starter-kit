@@ -37,7 +37,7 @@ export default function ManagePasskeys(props: Props) {
 
     // Registered by the package in the browser: render the list again.
     const handleRegisterSuccess = () => {
-        refresh();
+        void refresh();
     };
 
     if (!(props.canManagePasskeys ?? false)) {

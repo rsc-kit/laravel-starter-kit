@@ -5,7 +5,6 @@ import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -15,7 +14,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import type { NavItem, User } from '@/types';
+import type { ReactNode } from 'react';
+import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
@@ -38,7 +38,7 @@ const footerNavItems: NavItem[] = [
     },
 ];
 
-export function AppSidebar({ user }: { user: User }) {
+export function AppSidebar({ userMenu }: { userMenu: ReactNode }) {
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -59,7 +59,7 @@ export function AppSidebar({ user }: { user: User }) {
 
             <SidebarFooter>
                 <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser user={user} />
+                {userMenu}
             </SidebarFooter>
         </Sidebar>
     );
