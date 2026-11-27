@@ -14,7 +14,7 @@
         "laravel/fortify": "^1.37.2",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
-        "rsc-kit/laravel": "^0.31"
+        "rsc-kit/laravel": "^0.31.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
