@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "rsc-kit/laravel-starter-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Laravel's React starter kit on React Server Components: auth, settings, two-factor and passkeys, rendered by rsc-kit.",
     "keywords": [
         "laravel",
         "framework"
@@ -85,6 +85,7 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
+            "@php -r \"file_put_contents('.env', preg_replace_callback('/^(RSC_HOST_CALL_SECRET|RSC_SIGNING_SECRET)=$/m', fn () => func_get_arg(0)[1].'=\\\"'.base64_encode(random_bytes(32)).'\\\"', file_get_contents('.env')));\"",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
