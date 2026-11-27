@@ -1,4 +1,6 @@
-import { Link } from '@inertiajs/react';
+'use client';
+
+import Link from '@rsc-kit/core/Link';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 

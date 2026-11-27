@@ -1,11 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-Route::inertia('/', 'welcome')->name('home');
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
-});
-
-require __DIR__.'/settings.php';
+// Every page is in resources/js/app, and names itself: the dashboard is
+// route('dashboard'), the login page route('login'). Laravel routes here
+// answer what is not a page - a webhook, a download, an API.

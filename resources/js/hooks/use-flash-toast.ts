@@ -1,19 +1,9 @@
-import { router } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useFlash } from '@rsc-kit/core/useFlash';
 import { toast } from 'sonner';
-import type { FlashToast } from '@/types/ui';
 
+/** What an action flashed with Rsc::flash(), shown once as a toast. */
 export function useFlashToast(): void {
-    useEffect(() => {
-        return router.on('flash', (event) => {
-            const flash = (event as CustomEvent).detail?.flash;
-            const data = flash?.toast as FlashToast | undefined;
-
-            if (!data) {
-                return;
-            }
-
-            toast[data.type](data.message);
-        });
-    }, []);
+    useFlash(({ message, kind }) => {
+        (kind === 'error' ? toast.error : kind === 'info' ? toast.info : kind === 'warning' ? toast.warning : toast.success)(message);
+    });
 }

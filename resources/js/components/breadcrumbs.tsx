@@ -1,4 +1,6 @@
-import { Link } from '@inertiajs/react';
+'use client';
+
+import Link from '@rsc-kit/core/Link';
 import { Fragment } from 'react';
 import {
     Breadcrumb,

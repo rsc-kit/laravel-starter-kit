@@ -113,7 +113,7 @@
         "jsx": "react-jsx"
     },
     "include": [
-        "resources/js/**/*.ts",
+        ".rsc-kit/**/*",        "resources/js/**/*.ts",
         "resources/js/**/*.d.ts",
         "resources/js/**/*.tsx"
     ]

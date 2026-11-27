@@ -43,3 +43,13 @@ yarn-error.log
 /boost.json
 /opencode.json
 /opencode.jsonc
+
+# The RSC build: rewritten every run, and what it builds.
+.rsc-kit/
+resources/js/server-actions/
+rsc-host.json
+.output
+dist
+*.bun-build
+bootstrap/rsc/vite
+public/rsc-hot

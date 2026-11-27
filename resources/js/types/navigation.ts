@@ -1,14 +1,14 @@
-import type { InertiaLinkProps } from '@inertiajs/react';
+import type { Route } from '@rsc-kit/core/routes';
 import type { LucideIcon } from 'lucide-react';
 
 export type BreadcrumbItem = {
     title: string;
-    href: NonNullable<InertiaLinkProps['href']>;
+    href: Route;
 };
 
 export type NavItem = {
     title: string;
-    href: NonNullable<InertiaLinkProps['href']>;
+    href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
 };

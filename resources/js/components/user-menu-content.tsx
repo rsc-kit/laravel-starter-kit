@@ -1,4 +1,7 @@
-import { Link, router } from '@inertiajs/react';
+'use client';
+
+import { Form } from '@rsc-kit/core/form';
+import Link from '@rsc-kit/core/Link';
 import { LogOut, Settings } from 'lucide-react';
 import {
     DropdownMenuGroup,
@@ -8,8 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { logout } from '@/routes';
-import { edit } from '@/routes/profile';
+import * as session from '@/server-actions/session';
 import type { User } from '@/types';
 
 type Props = {
@@ -18,11 +20,6 @@ type Props = {
 
 export function UserMenuContent({ user }: Props) {
     const cleanup = useMobileNavigation();
-
-    const handleLogout = () => {
-        cleanup();
-        router.flushAll();
-    };
 
     return (
         <>
@@ -36,8 +33,7 @@ export function UserMenuContent({ user }: Props) {
                 <DropdownMenuItem asChild>
                     <Link
                         className="block w-full cursor-pointer"
-                        href={edit()}
-                        prefetch
+                        href="/settings/profile"
                         onClick={cleanup}
                     >
                         <Settings className="mr-2" />
@@ -46,18 +42,18 @@ export function UserMenuContent({ user }: Props) {
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-                <Link
-                    className="block w-full cursor-pointer"
-                    href={logout()}
-                    as="button"
-                    onClick={handleLogout}
-                    data-test="logout-button"
-                >
-                    <LogOut className="mr-2" />
-                    Log out
-                </Link>
-            </DropdownMenuItem>
+            <Form action={session.destroy} onSubmit={cleanup}>
+                <DropdownMenuItem asChild>
+                    <button
+                        type="submit"
+                        className="block w-full cursor-pointer"
+                        data-test="logout-button"
+                    >
+                        <LogOut className="mr-2" />
+                        Log out
+                    </button>
+                </DropdownMenuItem>
+            </Form>
         </>
     );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { Slot } from "@radix-ui/react-slot"
 import type { VariantProps} from "class-variance-authority";
 import { cva } from "class-variance-authority"
@@ -25,6 +27,14 @@ import { cn } from "@/lib/utils"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+const SIDEBAR_COOKIE_PATTERN = new RegExp(`(?:^|;\\s*)${SIDEBAR_COOKIE_NAME}=false`)
+
+// The open state lives in a cookie this component writes itself. Reading it
+// back on the server would make every page with a sidebar render per request
+// for a preference; reading it here lets the browser take the cookie on
+// hydration, with defaultOpen as the server's answer and no mismatch.
+const subscribeToSidebarCookie = () => () => {}
+const sidebarCookieOpen = () => !SIDEBAR_COOKIE_PATTERN.test(document.cookie)
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
@@ -69,8 +79,14 @@ function SidebarProvider({
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(defaultOpen)
-  const open = openProp ?? _open
+  const cookieOpen = React.useSyncExternalStore(
+    subscribeToSidebarCookie,
+    sidebarCookieOpen,
+    () => defaultOpen
+  )
+  // Null until the visitor toggles, so the cookie decides the first paint.
+  const [_open, _setOpen] = React.useState<boolean | null>(null)
+  const open = openProp ?? _open ?? cookieOpen
   const setOpen = React.useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
       const openState = typeof value === "function" ? value(open) : value

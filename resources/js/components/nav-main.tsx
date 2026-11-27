@@ -1,4 +1,6 @@
-import { Link } from '@inertiajs/react';
+'use client';
+
+import Link from '@rsc-kit/core/Link';
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -6,11 +8,12 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useCurrentUrl } from '@/hooks/use-current-url';
+import { usePathname } from '@rsc-kit/core/usePathname';
+import type { Route } from '@rsc-kit/core/routes';
 import type { NavItem } from '@/types';
 
 export function NavMain({ items }: { items: NavItem[] }) {
-    const { isCurrentUrl } = useCurrentUrl();
+    const pathname = usePathname();
 
     return (
         <SidebarGroup className="px-2 py-0">
@@ -20,10 +23,10 @@ export function NavMain({ items }: { items: NavItem[] }) {
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                             asChild
-                            isActive={isCurrentUrl(item.href)}
+                            isActive={item.href === pathname}
                             tooltip={{ children: item.title }}
                         >
-                            <Link href={item.href} prefetch>
+                            <Link href={item.href as Route}>
                                 {item.icon && <item.icon />}
                                 <span>{item.title}</span>
                             </Link>
