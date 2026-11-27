@@ -19,7 +19,7 @@
         "@radix-ui/react-toggle": "^1.1.2",
         "@radix-ui/react-toggle-group": "^1.1.2",
         "@radix-ui/react-tooltip": "^1.1.8",
-        "@rsc-kit/core": "^0.44.0",
+        "@rsc-kit/core": "^0.45.0",
         "@tailwindcss/vite": "^4.1.11",
         "@types/react": "^19.2.0",
         "@types/react-dom": "^19.2.0",
@@ -38,14 +38,14 @@
         "typescript": "^7.0.2",
       },
       "devDependencies": {
-        "@rsc-kit/mcp": "^0.44.0",
+        "@rsc-kit/mcp": "^0.45.0",
         "@types/bun": "^1.4.0",
         "@types/node": "^22.13.5",
         "@vitejs/plugin-rsc": "^0.5.34",
         "nitro": "3.0.261103-rc",
         "oxlint": "^1.81.0",
         "oxlint-tsgolint": "^7.0.2003",
-        "rsc-kit": "^0.44.0",
+        "rsc-kit": "^0.45.0",
         "vite": "^8.0.0",
       },
       "optionalDependencies": {
@@ -255,9 +255,9 @@
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.9.5", "", { "os": "win32", "cpu": "x64" }, "sha512-1q+mykKE3Vot1kaFJIDoUFv5TuW+QQVaf2FmTT9krg86pQrGStOSJJ0Zil7CFagyxDuouTepzt5Y5TVzyajOdQ=="],
 
-    "@rsc-kit/core": ["@rsc-kit/core@0.44.0", "", { "peerDependencies": { "@vitejs/plugin-rsc": "^0.5.38", "nuqs": ">=2.4.0", "react": "^19.2.3", "react-dom": "^19.2.3", "vite": "^8.0.0" }, "optionalPeers": ["@vitejs/plugin-rsc", "nuqs", "vite"], "bin": { "rsc-kit-typegen": "dist/typegen.js", "rsc-kit-conformance": "dist/conformance.js" } }, "sha512-HH7UKXG8OSXC8e0wlwbJPpOG+bkOpXOV850vOTA3JKaulaOCgCQPhkh/0RHmD4gKh1HOlqLjaEnCKoBzwvTwjQ=="],
+    "@rsc-kit/core": ["@rsc-kit/core@0.45.0", "", { "peerDependencies": { "@vitejs/plugin-rsc": "^0.5.38", "nuqs": ">=2.4.0", "react": "^19.2.3", "react-dom": "^19.2.3", "vite": "^8.0.0" }, "optionalPeers": ["@vitejs/plugin-rsc", "nuqs", "vite"], "bin": { "rsc-kit-typegen": "dist/typegen.js", "rsc-kit-conformance": "dist/conformance.js" } }, "sha512-sT9iTGTGP/c4isrdsQ1SUCsfdRaLXlSET5mUYtGeYH/MPhNSVacp0YbpmOk8CGQ3glE5+BUYgJIeW40bsF83vw=="],
 
-    "@rsc-kit/mcp": ["@rsc-kit/mcp@0.44.0", "", { "dependencies": { "@modelcontextprotocol/sdk": "^1.30.0", "create-rsc-kit": "^0.44.0", "zod": "^3.25" }, "bin": { "rsc-kit-mcp": "dist/index.js" } }, "sha512-LliMlZV8PqVe1pVcf5BnuzwkbVVa1XhpNxFuYalKoUmPeHOeY0b5e+yqGuSLAC3O7wTPmNDXAWfJxlneS/Pf4w=="],
+    "@rsc-kit/mcp": ["@rsc-kit/mcp@0.45.0", "", { "dependencies": { "@modelcontextprotocol/sdk": "^1.30.0", "create-rsc-kit": "^0.45.0", "zod": "^3.25" }, "bin": { "rsc-kit-mcp": "dist/index.js" } }, "sha512-lei6pHlnw2753RJpad3rgXeub+N1z4s2sBHFkMeDfXENrGcp8IZgwT8zv5Z1NxrNtWQukzjp3fVlOkbLjdHneA=="],
 
     "@simplewebauthn/browser": ["@simplewebauthn/browser@13.3.0", "", {}, "sha512-BE/UWv6FOToAdVk0EokzkqQQDOWtNydYlY6+OrmiZ5SCNmb41VehttboTetUM3T/fr6EAFYVXjz4My2wg230rQ=="],
 
@@ -377,7 +377,7 @@
 
     "cors": ["cors@2.8.6", "", { "dependencies": { "object-assign": "^4", "vary": "^1" } }, "sha512-tJtZBBHA6vjIAaF6EnIaq6laBBP9aq/Y3ouVJjEfoHbRBcHBAHYcMh/w8LDrk2PvIMMq8gmopa5D4V8RmbrxGw=="],
 
-    "create-rsc-kit": ["create-rsc-kit@0.44.0", "", { "bin": { "create-rsc-kit": "dist/index.js" } }, "sha512-Y2rAx6d++mqObxc7uv8nMRNiCVvCedcX/InmRqg5uubG2C6DPqM3NjrD6FrA2wC0lFqCSwI6w+ecgNCwCvk2VQ=="],
+    "create-rsc-kit": ["create-rsc-kit@0.45.0", "", { "bin": { "create-rsc-kit": "dist/index.js" } }, "sha512-0cFiWE4gnOH6fcIA5CRIfdjlxtBjcfOn8cB8O0fKZrqzpCrI2MXD/+JFxfJm1AYTn0jKaRhoSTmUd9whxg4eQg=="],
 
     "cross-spawn": ["cross-spawn@7.0.6", "", { "dependencies": { "path-key": "^3.1.0", "shebang-command": "^2.0.0", "which": "^2.0.1" } }, "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA=="],
 
@@ -591,7 +591,7 @@
 
     "router": ["router@2.3.0", "", { "dependencies": { "debug": "^4.4.0", "depd": "^2.0.0", "is-promise": "^4.0.0", "parseurl": "^1.3.3", "path-to-regexp": "^8.0.0" } }, "sha512-bpowRfGjEPe8t9R6fJIzhwmyCGAXwKvxBUsgJm+bJukwdcWmUXbMo7p22w7aYmQBPQTUMNqMV39YX0kMou3z8w=="],
 
-    "rsc-kit": ["rsc-kit@0.44.0", "", { "dependencies": { "@rsc-kit/core": "^0.44.0", "create-rsc-kit": "^0.44.0" }, "bin": { "rsc-kit": "dist/index.js" } }, "sha512-Rw6Ik7ca44GfXwJ56VVZgl0j8ZHQMfNxlukO59cGTbmisFiCcJ+7jsHJuQoe0aE+q3YT/B4UUGJ/XOEmeLqliw=="],
+    "rsc-kit": ["rsc-kit@0.45.0", "", { "dependencies": { "@rsc-kit/core": "^0.45.0", "create-rsc-kit": "^0.45.0" }, "bin": { "rsc-kit": "dist/index.js" } }, "sha512-dPcckPBq3/wB18NOpDyFt2SCPS9eZr/YpB/6VMD3KQEWVhhR8MrlRIOcbIM48WZW/hNTFVCaMRpgOi+Ab68Grg=="],
 
     "safer-buffer": ["safer-buffer@2.1.2", "", {}, "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="],
 

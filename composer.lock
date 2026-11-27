@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7460e260b818f55cd1d33aa1dc034b3b",
+    "content-hash": "4a906a1f9629eef6783880a0f89dad02",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4029,11 +4029,17 @@
         },
         {
             "name": "rsc-kit/laravel",
-            "version": "dev-main",
+            "version": "v0.31.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rsc-kit/laravel.git",
+                "reference": "2a81186b83546f55a20e99c7ead5c1031f2ba8da"
+            },
             "dist": {
-                "type": "path",
-                "url": "../lara-bun",
-                "reference": "f6b17097217c24a5b5d5c2bba7f02dba7a3990c9"
+                "type": "zip",
+                "url": "https://api.github.com/repos/rsc-kit/laravel/zipball/2a81186b83546f55a20e99c7ead5c1031f2ba8da",
+                "reference": "2a81186b83546f55a20e99c7ead5c1031f2ba8da",
+                "shasum": ""
             },
             "require": {
                 "illuminate/console": "^13.0",
@@ -4065,22 +4071,7 @@
                     "RscKit\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "lint": [
-                    "vendor/bin/pint"
-                ],
-                "lint:dirty": [
-                    "vendor/bin/pint --dirty"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4093,16 +4084,19 @@
             "description": "React Server Components for Laravel: the renderer serves the request, Laravel answers it",
             "homepage": "https://github.com/rsc-kit/laravel",
             "keywords": [
+                "SSR",
                 "laravel",
                 "react",
                 "react-server-components",
                 "rsc",
-                "ssr",
                 "streaming"
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/rsc-kit/laravel/issues",
+                "source": "https://github.com/rsc-kit/laravel/tree/v0.31.0"
+            },
+            "time": "2026-11-27T21:27:14+00:00",
+            "published-time": "2026-11-27T21:27:39+00:00"
         },
         {
             "name": "spomky-labs/cbor-php",
@@ -10540,18 +10534,9 @@
             "published-time": "2025-12-08T11:19:39+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "rsc-kit/laravel",
-            "version": "dev-main",
-            "alias": "0.30.1",
-            "alias_normalized": "0.30.1.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "rsc-kit/laravel": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

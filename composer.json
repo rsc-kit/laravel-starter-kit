@@ -14,7 +14,7 @@
         "laravel/fortify": "^1.37.2",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
-        "rsc-kit/laravel": "dev-main as 0.30.1"
+        "rsc-kit/laravel": "^0.31"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
@@ -112,10 +112,5 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "repositories": [{
-        "name": "rsc-kit",
-        "type": "path",
-        "url": "../lara-bun"
-    }]
+    "prefer-stable": true
 }
