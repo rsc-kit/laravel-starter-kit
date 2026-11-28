@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   plugins: [
-    nitro({ preset: "bun", serveStatic: 'inline' }),
+    nitro({ preset: "node", serveStatic: 'inline' }),
     rscKit({
       sourceDir: 'resources/js',
       outDir: 'bootstrap/rsc/vite',

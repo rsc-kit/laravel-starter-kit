@@ -26,7 +26,8 @@ class ProfileUpdateTest extends TestCase
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ], from: '/settings/profile')
-            ->assertJson(['redirect' => route('profile.edit', absolute: false)]);
+            ->assertOk()
+            ->assertJsonPath('result', 'Profile updated.');
 
         $user->refresh();
 
@@ -42,7 +43,7 @@ class ProfileUpdateTest extends TestCase
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ], from: '/settings/profile')
-            ->assertJson(['revalidate' => ['all']]);
+            ->assertJsonPath('revalidate', ['user-menu', 'page']);
     }
 
     public function test_email_is_stored_in_lowercase_so_the_user_can_still_log_in()
@@ -90,7 +91,8 @@ class ProfileUpdateTest extends TestCase
                 'name' => 'Test User',
                 'email' => $user->email,
             ], from: '/settings/profile')
-            ->assertJson(['redirect' => route('profile.edit', absolute: false)]);
+            ->assertOk()
+            ->assertJsonPath('result', 'Profile updated.');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }

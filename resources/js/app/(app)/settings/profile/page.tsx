@@ -2,7 +2,6 @@ import type { Metadata } from "@rsc-kit/core/metadata";
 import { Suspense } from "react";
 import { AppSidebarHeader } from "@/components/app-sidebar-header";
 import DeleteUser from "@/components/delete-user";
-import { SessionToast } from "@/components/session-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import SettingsLayout from "@/layouts/settings/layout";
 import type { User } from "@/types";
@@ -22,9 +21,6 @@ export default function Profile() {
                     { title: "Profile settings", href: "/settings/profile" },
                 ]}
             />
-            <Suspense>
-                <SessionToast />
-            </Suspense>
 
             <SettingsLayout>
                 <h1 className="sr-only">Profile settings</h1>

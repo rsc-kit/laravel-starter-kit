@@ -2,6 +2,7 @@
 
 import { Form } from "@rsc-kit/core/form";
 import { useRef } from "react";
+import { toast } from "sonner";
 import Heading from "@/components/heading";
 import InputError from "@/components/input-error";
 import PasswordInput from "@/components/password-input";
@@ -25,6 +26,7 @@ export function PasswordForm({ passwordRules }: { passwordRules: string }) {
             <Form
                 action={password.update}
                 ref={form}
+                onSuccess={(message) => toast.success(message)}
                 onError={(errors) => {
                     // A refused password is not left in the fields.
                     form.current?.reset();

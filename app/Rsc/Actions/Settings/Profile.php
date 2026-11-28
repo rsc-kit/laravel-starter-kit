@@ -16,7 +16,8 @@ use RscKit\Rsc;
 #[Middleware('auth')]
 class Profile
 {
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    /** The message is the answer, and the form that posted it shows it. */
+    public function update(ProfileUpdateRequest $request): string
     {
         $request->user()->fill($request->validated());
 
@@ -26,12 +27,11 @@ class Profile
 
         $request->user()->save();
 
-        session()->flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
+        // The sidebar's user menu shows the name, and the page whether the
+        // new email is verified: the answer carries both re-rendered.
+        Rsc::revalidate('user-menu', 'page');
 
-        // The sidebar shows the name, and a redirect keeps the layouts.
-        Rsc::revalidate('all');
-
-        return to_route('profile.edit');
+        return __('Profile updated.');
     }
 
     #[Middleware('verified')]
