@@ -27,9 +27,9 @@ class Profile
 
         $request->user()->save();
 
-        // The sidebar shows the name, and the page whether the new email
-        // is verified: the answer carries both re-rendered.
-        Rsc::revalidate('all');
+        // The sidebar's user menu shows the name, and the page whether the
+        // new email is verified: the answer carries both re-rendered.
+        Rsc::revalidate('user-menu', 'page');
 
         return __('Profile updated.');
     }

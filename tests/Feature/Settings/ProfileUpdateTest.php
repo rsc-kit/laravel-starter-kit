@@ -27,9 +27,7 @@ class ProfileUpdateTest extends TestCase
                 'email' => 'test@example.com',
             ], from: '/settings/profile')
             ->assertOk()
-            ->assertJsonPath('result', 'Profile updated.')
-            // The sidebar's name and the page's verified state, re-rendered.
-            ->assertJsonPath('revalidate', ['all']);
+            ->assertJsonPath('result', 'Profile updated.');
 
         $user->refresh();
 
@@ -45,7 +43,7 @@ class ProfileUpdateTest extends TestCase
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ], from: '/settings/profile')
-            ->assertJson(['revalidate' => ['all']]);
+            ->assertJsonPath('revalidate', ['user-menu', 'page']);
     }
 
     public function test_email_is_stored_in_lowercase_so_the_user_can_still_log_in()

@@ -2,8 +2,8 @@ import { Suspense, type ReactNode } from "react";
 import { AppContent } from "@/components/app-content";
 import { AppShell } from "@/components/app-shell";
 import { AppSidebar } from "@/components/app-sidebar";
-import { NavUser, NavUserSkeleton } from "@/components/nav-user";
-import type { User } from "@/types";
+import { NavUserSkeleton } from "@/components/nav-user";
+import UserMenu from "./user-menu.section";
 
 // The shell renders at once: the sidebar, its links and the page. Only the
 // user menu waits on Laravel for the signed-in user, and only it shows a
@@ -16,7 +16,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <AppSidebar
                 userMenu={
                     <Suspense fallback={<NavUserSkeleton />}>
-                        <SignedInUser />
+                        <UserMenu />
                     </Suspense>
                 }
             />
@@ -25,8 +25,4 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </AppContent>
         </AppShell>
     );
-}
-
-async function SignedInUser() {
-    return <NavUser user={await rpc<User>("Shared.user")} />;
 }
