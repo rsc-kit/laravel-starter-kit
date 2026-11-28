@@ -35,17 +35,6 @@ class Shared
     }
 
     /**
-     * The toast an action flashed - "Profile updated." - for the page it
-     * sent the visitor to, as Inertia::flash('toast') was.
-     *
-     * @return array{type: 'success'|'info'|'warning'|'error', message: string}|null
-     */
-    public function toast(Request $request): ?array
-    {
-        return $request->session()->get('toast');
-    }
-
-    /**
      * Configuration, the same for every visitor, so a page that reads only
      * this is stored at build.
      *

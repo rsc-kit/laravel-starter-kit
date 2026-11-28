@@ -5,7 +5,6 @@ import type { Props as ManagePasskeysProps } from "@/components/manage-passkeys"
 import ManagePasskeys from "@/components/manage-passkeys";
 import type { Props as ManageTwoFactorProps } from "@/components/manage-two-factor";
 import ManageTwoFactor from "@/components/manage-two-factor";
-import { SessionToast } from "@/components/session-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import SettingsLayout from "@/layouts/settings/layout";
 import { PasswordForm } from "./password-form";
@@ -28,9 +27,6 @@ export default async function Security() {
                     { title: "Security settings", href: "/settings/security" },
                 ]}
             />
-            <Suspense>
-                <SessionToast />
-            </Suspense>
 
             <SettingsLayout>
                 <h1 className="sr-only">Security settings</h1>

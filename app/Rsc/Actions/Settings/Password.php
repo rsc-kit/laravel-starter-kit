@@ -3,7 +3,6 @@
 namespace App\Rsc\Actions\Settings;
 
 use App\Http\Requests\Settings\PasswordUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
 
 /** Changing the password from the security settings page. */
@@ -11,15 +10,17 @@ use Illuminate\Routing\Attributes\Controllers\Middleware;
 #[Middleware('verified')]
 class Password
 {
+    /**
+     * The message is the answer, and the form that posted it shows it: the
+     * page has nothing to show for a changed password, so nothing renders.
+     */
     #[Middleware('throttle:6,1')]
-    public function update(PasswordUpdateRequest $request): RedirectResponse
+    public function update(PasswordUpdateRequest $request): string
     {
         $request->user()->update([
             'password' => $request->password,
         ]);
 
-        session()->flash('toast', ['type' => 'success', 'message' => __('Password updated.')]);
-
-        return back();
+        return __('Password updated.');
     }
 }

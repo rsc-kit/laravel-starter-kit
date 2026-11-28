@@ -26,7 +26,10 @@ class ProfileUpdateTest extends TestCase
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ], from: '/settings/profile')
-            ->assertJson(['redirect' => route('profile.edit', absolute: false)]);
+            ->assertOk()
+            ->assertJsonPath('result', 'Profile updated.')
+            // The sidebar's name and the page's verified state, re-rendered.
+            ->assertJsonPath('revalidate', ['all']);
 
         $user->refresh();
 
@@ -90,7 +93,8 @@ class ProfileUpdateTest extends TestCase
                 'name' => 'Test User',
                 'email' => $user->email,
             ], from: '/settings/profile')
-            ->assertJson(['redirect' => route('profile.edit', absolute: false)]);
+            ->assertOk()
+            ->assertJsonPath('result', 'Profile updated.');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }

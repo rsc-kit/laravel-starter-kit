@@ -2,6 +2,7 @@
 
 import { Form } from "@rsc-kit/core/form";
 import { useAction } from "@rsc-kit/core/useAction";
+import { toast } from "sonner";
 import Heading from "@/components/heading";
 import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ export function ProfileForm({ user, mustVerifyEmail, status }: Props) {
             <Form
                 action={profile.update}
                 resetOnSuccess={false}
+                onSuccess={(message) => toast.success(message)}
                 className="space-y-6"
             >
                 {({ pending, error, formError }) => (

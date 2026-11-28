@@ -82,7 +82,8 @@ class SecurityTest extends TestCase
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
             ], from: '/settings/security')
-            ->assertJson(['redirect' => route('security.edit', absolute: false)]);
+            ->assertOk()
+            ->assertJsonPath('result', 'Password updated.');
 
         $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
     }
